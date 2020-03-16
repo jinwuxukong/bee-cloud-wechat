@@ -1,0 +1,33 @@
+server:
+  port: 80
+  servlet:
+    context-path: /wechat
+    compression:
+      enabled: true
+      mime-types: application/javascript,application/json,application/xml,text/html,text/xml,text/plain,text/css,image/*
+spring:
+  # 设置静态文件路径，js,css等
+  profiles:
+    active: dev
+  application:
+    name: bee-cloud-wechat
+  mvc:
+    pathmatch:
+      use-suffix-pattern: false
+      use-registered-suffix-pattern: true
+    contentnegotiation:
+      favor-path-extension: false
+    static-path-pattern: /**
+  resource:
+    static-locations: classpath:/static/,classpath:/public/
+
+mybatis:
+  mapper-locations: classpath*:com/jeecg/p3/**/sqlmap/*.xml
+  type-aliases-package: com.jeecg.p3.*.entity
+# 日志
+logging:
+  #  生成日志文件名称
+  file: ${spring.application.name}
+  #  日志文件输出目录，没有会自动生成目录
+  path: ./logs
+

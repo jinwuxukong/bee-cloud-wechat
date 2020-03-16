@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>信息绑定</title>
+    <link rel="stylesheet" href="$!{basePath}/plug-in/followup/bootstrap/css/bootstrap.css">
+    <script src="$!{basePath}/plug-in/followup/jquery/jquery.js"></script>
+    <script src="$!{basePath}/plug-in/followup/bootstrap/js/bootstrap.js"></script>
+    <script src="$!{basePath}/plug-in/followup/weixin/jweixin-1.4.0.js"></script>
+    <style>
+        .form-control input {
+            line-height: 120%;
+        }
+    </style>
+    <script>
+
+    </script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-offset-3 col-sm-6" id="input-form">
+            <h3 style="text-align: center">请正确填写你的信息</h3>
+            <form id="bindForm" action="bindInfo" method="post">
+                <div class="form-group">
+                    <input type="hidden" name="openId" id="openId">
+                </div>
+                <div class="form-group">
+                    <label>姓名</label>
+                    <input type="text" class="form-control" placeholder="姓名" name="name" id="name">
+                </div>
+                <div class="form-group">
+                    <label>出生日期</label>
+                    <input type="date" class="form-control" id="birthday" placeholder="格式 1980-10-12" name="birthday">
+                </div>
+                <div class="form-group">
+                    <label>性别</label>
+                    <span>&nbsp;&nbsp;男</span>:&nbsp;<input type="radio" name="sex" value="0" style="padding-top: 3px;">
+                    <span>&nbsp;&nbsp;女</span>:&nbsp;<input type="radio" name="sex" value="1" style="padding-top: 3px;">
+                </div>
+                <div class="form-group">
+                    <label>手机号</label>
+                    <input type="text" class="form-control" placeholder="手机号" name="phone" id="phone">
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-lg  btn-success" style="width: 100%">确认</button>
+                </div>
+            </form>
+        </div>
+        <div id="message">
+
+        </div>
+    </div>
+</div>
+<script>
+    var openId = '${openId}';
+    console.log(openId)
+    $(function () {
+        $("input[name='openId']").val(openId);
+        $("#message").hide();
+        let array = {openId: openId};
+        let json = JSON.stringify(array);
+        /*$.ajax({
+            url: 'http://192.168.3.68:8080/jeewx/isBind',
+            type: 'post',
+            contentType: 'application/json',
+            data: json,
+            success: function (data) {
+                if (data.code === 200) {
+                    if (data.bindStatus === '2') {
+                        $("#input-form").hide();
+                        $("#message").show();
+                        var seconds = 5;
+                        var timer = null;
+                        timer = setInterval(show,1000);
+                        function show(){
+                            if(seconds===0){
+                                clearInterval(timer);
+                                WeixinJSBridge.call('closeWindow')
+                                return;
+                            }
+                            $("#message").html("您已经绑定了" + data.doctorName + "医生，" + seconds + "s后结束")
+                            seconds--;
+                        }
+                    }
+                }
+            }
+        })*/
+        $("#bindForm").submit(function () {
+            //1，这里获取表单中的数据，发送ajax请求，提交表单
+            let openId = $("#openId").val();
+            let name = $("#name").val();
+            let birthday = $("#birthday").val();
+            let sex = $("input[name='sex']:checked").val();
+            let phone = $("#phone").val();
+
+            //表单校验工作
+            if ($.trim($("#name").val()) == "") {
+                alert("请先填写您的姓名");
+                return false;
+            }
+            if ($("#birthday").val() === '') {
+                alert("请填写出生日期");
+                return false;
+            }
+            if ($("#name").val().length > 10) {
+                alert("患者姓名不能大于十个字符");
+                return false;
+            }
+
+            var reg = /^0?(13[0-9]|15[0-9]|18[0-9]|14[57]|17[0-9])[0-9]{8}$/;
+            if (!reg.test($("#phone").val())) {
+                alert("请输入正确的手机号");
+                return false;
+            }
+            let array = {openId: openId, name: name, birthday: birthday, sex: sex, phone: phone};
+            console.log(array)
+            //2，接受一个数组 拿到返回的状态值和医生的名字 ，弹出绑定xxx成功的状态，弹出确定按钮，触发后关闭微信窗口
+            let json = JSON.stringify(array);
+            console.log(json)
+            //发送ajax请求
+            $.ajax({
+                url: 'bindInfo',
+                contentType: 'application/json',
+                type: 'post',
+                data: json,
+                success: function (data) {
+                    console.log(data)
+                    if (data.code === 200) {
+                        if (window.confirm("" + data.msg + "")) {
+                            WeixinJSBridge.call('closeWindow')
+                        }
+                    } else {
+                        alert(data.msg)
+                    }
+                }
+            })
+            return false;
+        });
+    })
+</script>
+</body>
+</html>

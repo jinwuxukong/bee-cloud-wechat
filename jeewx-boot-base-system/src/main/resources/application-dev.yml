@@ -1,0 +1,78 @@
+spring:
+  datasource:
+    name: mysql
+    type: com.alibaba.druid.pool.DruidDataSource
+    #druid相关配置
+    druid:
+      #监控统计拦截的filters
+      filters: stat
+      driver-class-name: com.mysql.jdbc.Driver
+      #基本属性
+      url: jdbc:mysql://120.78.209.93:3306/jeewx-boot?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false
+      username: root
+      password: qwert123!@#
+      #配置初始化大小/最小/最大
+      initial-size: 1
+      min-idle: 1
+      max-active: 20
+      #获取连接等待超时时间
+      max-wait: 60000
+      #间隔多久进行一次检测，检测需要关闭的空闲连接
+      time-between-eviction-runs-millis: 60000
+      #一个连接在池中最小生存的时间
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 'x'
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      #打开PSCache，并指定每个连接上PSCache的大小。oracle设为true，mysql设为false。分库分表较多推荐设置为false
+      pool-prepared-statements: false
+      max-pool-prepared-statement-per-connection-size: 20
+jeewx:
+  #拦截器配置
+  interceptor:
+    #是否开启
+    is-open: true
+    #排除拦截URL
+    excludeUrls:
+      login-interceptor: /system/back/article/toIndex.do,/system/back/article/toArticle.do,/system/preSelectJwid.do,/system/back/home.do,/system/back/jwSystemAccountAPI/getUserAccountAmount.do,/back/backIndex/home.do
+      access-sign-interceptor: /api/cms/**,/cms/**,/wechatController.do,/weixinNewsController/goContent.do,/weixinLinksucai/link.do,/linksucai/link.do,/fx/mall/payCallBack.do,/newsController/getNewsClassify.do,/newsController/getNewslist.do,/CommonController/sendMsgCode.do,/followup/**
+  #Redis缓存配置
+  redis:
+    ip: 127.0.0.1
+    port: 6379
+    password:
+    pool:
+      maxTotal: 1024
+      maxIdle: 200
+      maxWaitMilli: 1000
+      testOnBorrow: true
+      testOnReturn: true
+  #邮箱配置
+  mail:
+    smtpHost: smtp.exmail.qq.com
+    sender: jeewx@jeecg.org
+    user: jeewx@jeecg.org
+    pwd:
+  #阿里云短信接口秘钥
+  sms:
+    accessKeyId:
+    accessKeySecret:
+  path:
+    #文件上传根目录
+    upload: E://
+
+followup:
+  JWID: gh_3d05ed06761b
+  APPID: wx178396dba45bf1a9
+  APPSECRET: 2f0010f2f9a718b40b228bb263bd1ec5
+  FOLLOWUPDOMAIN: http://192.168.3.11:8080
+#  WECHATDOMAIN: http://zyzjeewx.utools.club/wechat
+#  PAGEADDRESS: http://wx-patient.hnasa.cn
+#  NEWSITEM: 2c9231666eb68255016eb684406e0001
+  WECHATDOMAIN: http://hutu.utools.club/wechat
+  PAGEADDRESS: http://liangao.utools.club
+  NEWSITEM: 2c9231666eb68255016eb68255990000
+  # 扫码关注事件需要发送的关注模板id
+  scanSubTemplateId: 4028838b6f560054016f5605b68c0001
+  notScanSubTemplateId: 4028838b6f56244d016f5627aaa90001

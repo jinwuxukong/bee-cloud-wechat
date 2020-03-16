@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>表单或者量表预览界面</title>
+    <link rel="stylesheet" href="$!{basePath}/plug-in/followup/bootstrap/css/bootstrap.css">
+    <script src="$!{basePath}/plug-in/followup/jquery/jquery.js"></script>
+    <script src="$!{basePath}/plug-in/followup/bootstrap/js/bootstrap.js"></script>
+    <script src="$!{basePath}/plug-in/followup/weixin/jweixin-1.4.0.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+
+</div>
+<script>
+    //获取地址栏携带的参数
+    let href = window.location.href;
+    alert(href)
+</script>
+</body>
+</html>
